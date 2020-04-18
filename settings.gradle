@@ -1,0 +1,2 @@
+rootProject.name='Clean Arch Android'
+include ':app'
