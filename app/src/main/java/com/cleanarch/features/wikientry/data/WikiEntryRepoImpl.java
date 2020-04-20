@@ -43,12 +43,17 @@ public class WikiEntryRepoImpl implements WikiEntryRepo {
         Flowable<List<WikiEntryTable>> entries = cleanArchDatabase.wikiEntryDao().getByTitle(title);
          return entries.flatMap(wikiEntryTables -> {
 
-             WikiEntryTable firstEntry = wikiEntryTables.get(0);
-             Log.d(TAG, "Found and sending data from local");
+             if(!wikiEntryTables.isEmpty()) {
 
-             return Flowable.just(new WikiEntry(firstEntry.getPageId(),
-                     firstEntry.getTitle(), firstEntry.getExtract()));
-         });
+                 WikiEntryTable firstEntry = wikiEntryTables.get(0);
+                 Log.d(TAG, "Found and sending data from local");
+
+                 return Flowable.just(new WikiEntry(firstEntry.getPageId(),
+                         firstEntry.getTitle(), firstEntry.getExtract()));
+
+             }
+             return Flowable.empty();
+             });
 
 
     }
